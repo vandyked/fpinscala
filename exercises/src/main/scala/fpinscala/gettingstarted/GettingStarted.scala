@@ -3,6 +3,9 @@ package fpinscala.gettingstarted
 // A comment!
 /* Another comment */
 /** A documentation comment */
+/**
+  * Block comment
+  */
 object MyModule {
   def abs(n: Int): Int =
     if (n < 0) -n
