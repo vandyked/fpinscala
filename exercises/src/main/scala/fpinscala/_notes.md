@@ -10,10 +10,13 @@
  
 ***Chapter 2:*** Getting started (Scala syntax)
 - 
-- **Tail Recursive Functions:** 
+- **Tail Recursive Functions:** Compile tail recursive functions into iterations avoiding stack overflow. (use scala
+annotations to enfore this check @annotations.tailrec)
 - **Higher-Order Functions:** take functions as inputs and possibly also return functions as outputs
+- **Currying** and **Uncurrying** - reverse operations that compose/decompose function calls
+- **Polymorphic** functions (w.r.t parameters types ala generics in java/templating in C++)
  
-***Chapter 3:*** Getting started
+***Chapter 3:*** Functional Data Structures
 - 
 - **** 
 
