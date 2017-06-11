@@ -42,12 +42,13 @@ object MyModule {
     var i = n
     while (i > 0) { acc *= i; i -= 1 }
     acc
+    // should avoid these in favour of tail recursive functions
   }
 
   // Exercise 1: Write a function to compute the nth fibonacci number
 
   def fib(n: Int): Int = {
-    @annotation.tailrec
+    @annotation.tailrec // will cry if not able to compile recursion into iterative code - avoiding stack overflow
     def recursiveFib(n: Int, a: Int, b: Int): Int =
       if (n<= 0) a
       else recursiveFib(n-1, b, a+b)
@@ -165,7 +166,14 @@ object PolymorphicFunctions {
 
   // Exercise 2: Implement a polymorphic function to check whether
   // an `Array[A]` is sorted
-  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = ???
+  def isSorted[A](as: Array[A], gt: (A,A) => Boolean): Boolean = {
+    def loop(i:Int, j:Int) : Boolean = {
+      if (i.equals(as.length)) true
+      else if (gt(as(i), as(j))) loop(j, i+1)
+      else false
+    }
+    loop(0,1)
+  }
 
   // Polymorphic functions are often so constrained by their type
   // that they only have one implementation! Here's an example:
@@ -175,16 +183,20 @@ object PolymorphicFunctions {
 
   // Exercise 3: Implement `curry`.
 
+  /**
+    * _dv:UNSURE
+    */
   // Note that `=>` associates to the right, so we could
   // write the return type as `A => B => C`
   def curry[A,B,C](f: (A, B) => C): A => (B => C) =
-    ???
+  (a) => b => f(a, b)   // note the types of a and b are inferred by scala
 
   // NB: The `Function2` trait has a `curried` method already
 
   // Exercise 4: Implement `uncurry`
   def uncurry[A,B,C](f: A => B => C): (A, B) => C =
-    ???
+    (a,b) => f(a)(b)   // apply f to a, and then apply the result to b, giving c.
+  // this defines a function interface that takes a,b and gives c -- ie the uncurried version of curry
 
   /*
   NB: There is a method on the `Function` object in the standard library,
@@ -199,5 +211,6 @@ object PolymorphicFunctions {
   // Exercise 5: Implement `compose`
 
   def compose[A,B,C](f: B => C, g: A => B): A => C =
-    ???
+    (a:A) => f(g(a))
+  // or a => f(g(a))  being concise. 
 }
