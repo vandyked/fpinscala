@@ -19,6 +19,10 @@ object MyModule {
   def main(args: Array[String]): Unit =
     println(formatAbs(-42))
 
+  /**
+    * _dv: by not just having the function as factorial(n) -- since the "state"
+    * is held in acc -- you can call go(3,1000) and actually get 1000 * 3!
+    */
   // A definition of factorial, using a local, tail recursive function
   def factorial(n: Int): Int = {
     @annotation.tailrec
@@ -29,6 +33,9 @@ object MyModule {
     go(n, 1)
   }
 
+  /**
+    * _dv: This only modifies internal state - so is still Referentially Transparent
+    */
   // Another implementation of `factorial`, this time with a `while` loop
   def factorial2(n: Int): Int = {
     var acc = 1
@@ -39,7 +46,14 @@ object MyModule {
 
   // Exercise 1: Write a function to compute the nth fibonacci number
 
-  def fib(n: Int): Int = ???
+  def fib(n: Int): Int = {
+    @annotation.tailrec
+    def recursiveFib(n: Int, a: Int, b: Int): Int =
+      if (n<= 0) a
+      else recursiveFib(n-1, b, a+b)
+
+    recursiveFib(n, 0, 1)
+  }
 
   // This definition and `formatAbs` are very similar..
   private def formatFactorial(n: Int) = {
@@ -47,6 +61,9 @@ object MyModule {
     msg.format(n, factorial(n))
   }
 
+  /**
+    * _dv: functions are f: FromType => ToType
+    */
   // We can generalize `formatAbs` and `formatFactorial` to
   // accept a _function_ as a parameter
   def formatResult(name: String, n: Int, f: Int => Int) = {
@@ -68,7 +85,9 @@ object FormatAbsAndFactorial {
 }
 
 object TestFib {
-
+  /**
+    * _dv: not sure what this is?
+    */
   import MyModule._
 
   // test implementation of `fib`
@@ -88,6 +107,9 @@ object AnonymousFunctions {
   def main(args: Array[String]): Unit = {
     println(formatResult("absolute value", -42, abs))
     println(formatResult("factorial", 7, factorial))
+    /**
+      * _dv: some interesting syntax to learn here regarding anonymous functions
+      */
     println(formatResult("increment", 7, (x: Int) => x + 1))
     println(formatResult("increment2", 7, (x) => x + 1))
     println(formatResult("increment3", 7, x => x + 1))
